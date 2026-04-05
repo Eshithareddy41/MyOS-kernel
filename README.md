@@ -7,4 +7,7 @@ Features planned:
 -Kernel
 -VGA text output
 -Keyboard input
--Simple sheel
+-Simple shel
+
+
+

@@ -1,19 +1,53 @@
-[bits 16]
 [org 0x1000]
+[bits 16]
 
 start:
-    mov si, message
+    mov si, start_msg
+    call print_string
 
-print:
-    lodsb          
+    mov cx, 5          ; run scheduler 5 cycles (IMPORTANT)
+
+main_loop:
+    call scheduler
+    loop main_loop
+
+    mov si, done_msg
+    call print_string
+
+hang:
+    jmp hang
+
+; ------------------------
+print_string:
+    push ax
+    push si
+
+    mov ah, 0Eh
+.next:
+    lodsb
     cmp al, 0
-    je done
+    je .done
+    int 10h
+    jmp .next
 
-    mov ah, 0x0e
-    int 0x10
-    jmp print
+.done:
+    pop si
+    pop ax
+    ret
 
-done:
-    jmp $
+; ------------------------
+; simple delay (for better visualization)
+delay:
+    push cx
+    mov cx, 0FFFFh
+d1:
+    loop d1
+    pop cx
+    ret
 
-message db 'Welcome to MyOS',0
+; ------------------------
+start_msg db "Round Robin Scheduler Start",13,10,0
+done_msg  db "Scheduling Finished",13,10,0
+
+%include "scheduler.asm"
+%include "task.asm"

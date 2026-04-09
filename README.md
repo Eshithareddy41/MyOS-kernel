@@ -1,101 +1,117 @@
-MyOS Kernel 
+MyOS Kernel
 
-A minimal x86 Operating System built from scratch using Assembly language.
-This project demonstrates the complete boot process from BIOS to kernel execution.
-
----
+A Minimal Bare-Metal Educational Operating System with Round Robin Scheduling Demo
 Overview
 
-This project implements a simple educational operating system that:
+MyOS is a minimal x86 bare-metal operating system prototype developed for an Operating Systems course project. The system boots directly through BIOS, loads a custom kernel from disk, and demonstrates a simple Round Robin CPU scheduling simulation in real mode.
+Project Domain
 
-* Boots directly from BIOS
-* Loads a custom bootloader
-* Loads a kernel from disk into memory
-* Transfers execution control to the kernel
-* Displays output using BIOS interrupts
+This project belongs to the Hello World Bare-Metal OS category, extended with an additional feature: a simple CPU scheduling demonstration.
+Features
 
----
+    Custom bootloader written in x86 Assembly
+
+    BIOS-based disk loading of kernel into memory
+
+    Real-mode kernel execution at memory address 0x1000
+
+    Text output using BIOS video interrupt INT 10h
+
+    Simple Round Robin scheduling demonstration
+
+    Multiple tasks executed in cyclic order
+
+    QEMU-based testing and execution
 
 System Architecture
 
-```
 BIOS
- ↓
+↓
 Bootloader (boot.asm)
- ↓
-Loads kernel from disk
- ↓
-Kernel (kernel.asm)
- ↓
-Displays output on screen
-```
+↓
+Kernel loaded from disk
+↓
+Kernel execution (kernel.asm)
+↓
+Round Robin Scheduler
+↓
+Task 1 → Task 2 → Task 3
 
----
+Scheduling Feature
 
- Components
+The added feature in this project is a simple Round Robin CPU scheduling simulation.
 
-🔹 Bootloader (`boot.asm`)
+The scheduler repeatedly calls three predefined tasks in cyclic order:
 
-* Written in x86 Assembly (16-bit)
-* Loaded by BIOS at memory address `0x7C00`
-* Loads kernel sectors from disk into memory (`0x1000`)
-* Transfers control to kernel
+    Task 1
 
----
-🔹 Kernel (`kernel.asm`)
+    Task 2
 
-* Loaded at memory address `0x1000`
-* Displays message using BIOS interrupt `0x10`
-* Demonstrates basic execution of OS kernel
+    Task 3
 
----
+This demonstrates the core idea of fair time-sharing among tasks in an educational and simplified way.
+Files
 
-🔹 Makefile
+    boot.asm — bootloader code
 
-* Automates build process
-* Combines bootloader and kernel into a bootable image
-* Runs OS using emulator
+    kernel.asm — main kernel logic
 
----
- Build and Run
-  Requirements
+    scheduler.asm — round robin scheduler
 
-* NASM (assembler)
-* GCC (optional for future extensions)
-* QEMU emulator
+    task.asm — individual task definitions
 
- Build OS
+    Makefile — build and execution automation
 
-```bash
+    .gitignore — excludes generated files
+
+Build and Run
+
 make
-```
-
- Run OS
-
-```bash
 make run
-```
 
----
- Project Structure
+Expected Output
 
-```
-MyOS-kernel/
-├── boot.asm
-├── kernel.asm
-├── Makefile
-├── README.md
-└── .gitignore
-```
+B
+Round Robin Scheduler Start
+Running one scheduler cycle...
+[Task 1] Running
+[Task 2] Running
+[Task 3] Running
+...
+Scheduling Finished
 
----
- Concepts Covered
+Educational Value
 
-* BIOS boot process
-* Boot sector programming (512 bytes)
-* Disk sector loading using BIOS interrupt (`INT 13h`)
-* Text output using BIOS interrupt (`INT 10h`)
-* Memory addressing and segmentation
-* Low-level system programming
+This project demonstrates:
 
+    BIOS boot process
 
+    boot sector programming
+
+    kernel loading from disk
+
+    basic real-mode kernel execution
+
+    simplified CPU scheduling logic
+
+Limitations
+
+    Runs in 16-bit real mode
+
+    Scheduling is cooperative and simulated
+
+    No interrupts, context switching, or protected mode
+
+    No file system or memory management subsystem yet
+
+Future Work
+
+    keyboard input handling
+
+    interrupt-based scheduling
+
+    timer-driven preemption
+
+    VGA text mode driver
+
+    protected mode support
